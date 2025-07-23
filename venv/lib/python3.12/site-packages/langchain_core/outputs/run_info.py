@@ -1,8 +1,10 @@
+"""RunInfo class."""
+
 from __future__ import annotations
 
 from uuid import UUID
 
-from langchain_core.pydantic_v1 import BaseModel
+from pydantic import BaseModel
 
 
 class RunInfo(BaseModel):
