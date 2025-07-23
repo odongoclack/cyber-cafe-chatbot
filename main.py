@@ -18,13 +18,17 @@ from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 import time
 
 
-
+# ================================
+# CONFIGURATION & SETUP
+# ================================
 load_dotenv()
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+# Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# Hashed admin passwords for local testing.
 ADMIN_USERS = {
     "edwin123": hashlib.sha256("admin_password_for_edwin".encode()).hexdigest(),
     "clacks123": hashlib.sha256("admin_password_for_clacks".encode()).hexdigest()
@@ -45,7 +49,7 @@ def verify_admin(username: str) -> bool:
     return username.lower() in ADMIN_USERS
 
 
-
+# Database setup
 if DATABASE_URL:
     engine = create_engine(DATABASE_URL)
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -158,7 +162,7 @@ class CyberCafeKnowledge:
         
         return "\n".join(relevant_info) if relevant_info else ""
 
-# Instantiate the knowledge base
+# Instantiate the knowledge base globally
 knowledge_base = CyberCafeKnowledge()
 
 
@@ -170,6 +174,21 @@ llm = ChatAnthropic(
 ) if ANTHROPIC_API_KEY else None
 
 CUSTOMER_SYSTEM_PROMPT = """You are an AI assistant for a cyber cafe that provides multiple digital services.
+This cyber cafe, E-C Digital Hub, is owned and managed by Clackson Ager.
+
+ABOUT THE OWNER:
+- Name: Clackson Ager
+- Education: JKUAT student, studying B.Sc. statistics and programming , Software Engineering and Cybersecurity student
+- Profession: Fullstack Engineer, AI Engineer, IT Specialist, Graphic Designer
+- Experience: 3 years of professional experience
+- Skills: Proficient in Python, JavaScript, and other programming languages.
+- Contact:
+    - Phone: +254112670912
+    - Email: agerclackson44@gmail.com
+    - Social Media: @clacks
+- Location:
+    - Born: Kisumu Nyahera, Kenya
+    - Lives: Nairobi, Kenya
 
 SERVICES AVAILABLE:
 - Printing & Photocopying
@@ -190,8 +209,22 @@ RESPONSE STYLE:
 Current customer: {user_name}
 """
 
-ADMIN_SYSTEM_PROMPT = """You are the admin AI assistant for the cyber cafe management system.
-You have access to a list of services provided by the cyber cafe.
+ADMIN_SYSTEM_PROMPT = """You are the admin AI assistant for the E-C Digital Hub cyber cafe management system.
+This system was created by Clackson Ager, the owner of E-C Digital Hub.
+
+CREATOR & OWNER DETAILS:
+- Name: Clackson Ager
+- Education: JKUAT student, B.Sc. Statistics and programming, Software Engineering and Cybersecurity
+- Professional Role: AI Engineer, Fullstack Engineer, IT Specialist
+- Experience: 3 years
+- Skills: Python, JavaScript, and more
+- Contact: 
+    - Phone: +254112670912
+    - Email: agerclackson44@gmail.com
+    - Social Media: @clacks
+- Location:
+    - Born: Kisumu Nyahera, Kenya
+    - Lives: Nairobi, Kenya
 
 You can help with:
 - Customer service analytics
