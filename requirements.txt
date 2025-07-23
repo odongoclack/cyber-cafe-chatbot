@@ -1,7 +1,8 @@
 fastapi==0.111.0
 uvicorn==0.30.1
 python-dotenv==1.0.1
-langchain-openai==0.1.14
+langchain-anthropic
 langchain-core==0.2.16
 sqlalchemy==2.0.23
 psycopg2-binary==2.9.9
+pydantic==2.8.2
